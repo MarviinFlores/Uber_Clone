@@ -1,0 +1,28 @@
+
+import {InputFieldProps} from "@/types/types";
+import {TextInput,Text,View,Image, KeyboardAvoidingView, TouchableWithoutFeedback,Keyboard, Platform} from "react-native";
+
+const InputField = ({ label, labelStyle,icon, secureTextEntry = false, containerStyle,inputStyle, iconStyle,className, ...props }:InputFieldProps) =>{
+	return (
+	<KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
+
+		<TouchableWithoutFeedback onPress = {Keyboard.dismis}>
+
+			<View classname="my-2 w-full">
+				<Text classname={`text-lg font-JakartaSemiBold mb-3 ${labelStyle}`}>{label}</Text>
+				<View className={`flex flex-row justify-start items-center relative bg-neutral-100 rounded-full border border-neutral focus:border-primary-500 ${containerStyle}`}  >
+					
+					{icon && (<Image source={icon} className= {`w-6 h-6 ml-4 ${iconStyle} `}/>
+          )}
+					<TextInput className={`rounded-full p-4 font-JakartaSemiBold text-[15px] flex-1 ${inputStyle} text-left`} 
+						secureTextEntry= {secureTextEntry}  {...props}/>
+				</View>
+			</View>
+		</TouchableWithoutFeedback>
+	</KeyboardAvoidingView>
+	
+
+);
+};
+export default InputField;
+
