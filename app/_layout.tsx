@@ -2,6 +2,17 @@ import { Stack } from 'expo-router';
 import { useFonts} from 'expo-font';
 import {useEffect} from "react";
 
+import {ClerkProvider, ClerkLoaded} from "@clerk/clerk-expo";
+import {Slot} from 'expo-router';
+import {LogBox} from 'react-native';
+
+import { tokenCache } from '@/lib/auth';
+
+const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
+
+
+
+
 export const unstable_settings = {
   anchor: '(tabs)',
 };
@@ -16,14 +27,21 @@ export default function RootLayout() {
                         "Jakarta-Medium": require("../assets/fonts/PlusJakartaSans-Medium.ttf"),
                             "Jakarta-Regular": require("../assets/fonts/PlusJakartaSans-Regular.ttf"),
                                 "Jakarta-SemiBold": require("../assets/fonts/PlusJakartaSans-SemiBold.ttf"),
-                                
+                                                             
   });
-
+if (!publishableKey) {
+  throw new Error("Missing Publishable Key.Please set EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY in your .env"   ) ;
+      
+}
   return (
+    <ClerkProvider tokenCache={tokenCache} publishableKey= {publishableKey}>
+      <ClerkLoaded>
       <Stack>
          <Stack.Screen name="index" options={{ headerShown: false }} />
          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
          <Stack.Screen name="(root)" options={{ headerShown: false }} />
       </Stack>
+        </ClerkLoaded>
+      </ClerkProvider>
   );
 }
