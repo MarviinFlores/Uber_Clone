@@ -10,7 +10,7 @@ export default function Page(){
     <View>
 
     <SignedIn>
-      <Text>Hello {user?.emailAgdrresses[0].emailAddress} </Text>
+      <Text>Hello {user?.emailAddresses[0].emailAddress} </Text>
     </SignedIn>
     <SignedOut>
          <Link href="/sign-in">
@@ -25,6 +25,3 @@ export default function Page(){
 
   );
 }
-
-
-

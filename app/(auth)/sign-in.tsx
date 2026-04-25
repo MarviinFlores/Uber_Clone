@@ -15,7 +15,7 @@ const SignIn = () =>
     password: "",
   });
 
-  const onSingInPress = async () => {};
+  const onSignInPress = async () => {};
 
   return(
     <ScrollView className="flex-1 bg-white">
@@ -28,11 +28,11 @@ const SignIn = () =>
         </View>
         <View className="p-5 mt-5">
           <InputField 
-            label = "Nombre"
-            placeholder= "Tu Nombre"
-            icon ={icons.person}
-            value={form.name}
-            onChangeText= {(value)=>setForm( { ...form, name: value})} />
+            label = "Email"
+            placeholder="Tu E-mail"
+            icon ={icons.email}
+            value={form.email}
+            onChangeText= {(value)=>setForm( { ...form, email: value})} />
            <InputField 
              label = "Contrasena"
             placeholder= "Contrasena"
@@ -40,7 +40,7 @@ const SignIn = () =>
             value={form.password}
             onChangeText= {(value)=>setForm( { ...form, password: value})} />
 
-          <CustomButton title="Ingresa" onPress={onSingInPress} className="mt-10"/>
+          <CustomButton title="Ingresa" onPress={onSignInPress} className="mt-10"/>
           <OAuth />
 
           

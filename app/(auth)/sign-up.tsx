@@ -1,12 +1,12 @@
-import {ScrollView, Text, View, Image } from "react-native";
-import { useState } from "react";
+import {Alert, ScrollView, Text, View, Image } from "react-native";
+import { useState} from "react";
 import {icons, images}  from "@/constants";
 import InputField from "@/components/InputField";
 import CustomButton from "@/components/CustomButton";
-import {Link} from "expo-router";
+import {Link,router} from "expo-router";
 import OAuth from "@/components/OAuth"
 import { useSignUp } from "@clerk/clerk-expo";
-import {replace} from "expo-router/build/global-state/routing";
+
 import {ReactNativeModal} from "react-native-modal";
 
 const SignUp = () => {
@@ -37,18 +37,19 @@ const SignUp = () => {
                     await signUp.prepareEmailAddressVerification({ strategy: "email_code"  });
                           setVerification({
                             ...verification,
-                     state: "pending",
+                              state: "pending",
                                                 
                           });
                               
             } catch (err: any) {
-                           console.error(JSON.stringify(err, null, 2));
+                           console.log(JSON.stringify(err, null, 2));
+                           Alert.alert("Error",err.errors[0].longMessage);
                                      
             }
               
   };
   const onPressVerify = async () => {
-                                                                        
+        if (!isLoaded)return;                                                                
                 
         try {
           const completeSignUp = await signUp.attemptEmailAddressVerification({
@@ -56,20 +57,20 @@ const SignUp = () => {
                           
           });
           if (completeSignUp.status === "complete") {
-                   // ToDo crear data base use
-            await setActive({...verification, state:"succes"});
+                   // ToDo crear data base user
+             
+            await setActive({session: completeSignUp.createdSessionId});
+            setVerification ({...verification, state:"success"});
           } else {                      
 
             setVerification ({
                              ...verfication,
                              error:"Verication Failed " ,
-                             state:"failed"})                                                      
+                             state:"failed"});                                                      
                 }
                                 
              
         } catch (err: any) {
-                // See https://clerk.com/docs/custom-flows/error-handling
-          //       // for more info on error handling
                       setVerification({
                                ...verification,
                                         error: err.errors[0].longMessage,
@@ -85,8 +86,7 @@ const SignUp = () => {
       <View className="flex-1 bg-white">
         <View className=" relative w-full h-[250px]">
           <Image source= {images.signUpCar} className= "z-0 w-full h-[250px]" />
-          <Text className = "text-2xl text-black font-JakartaSemiBold absolute bottom-5 left-5"> 
-            Crea tu Cuenta
+          <Text className = "text-2xl text-black font-JakartaSemiBold absolute bottom-5 left-5"> Crea tu Cuenta
           </Text>
         </View>
         <View className="p-5 mt-5">
@@ -119,12 +119,15 @@ const SignUp = () => {
             <Text className="text-primary-500">Ingresa</Text>
             </Link>
         </View>
-    
-        <ReactNativeModal isVisible={verification.state === "susccess"}>
+         {/*verification modal*/}    
+        <ReactNativeModal isVisible={verification.state === "success"}>
+             console.log({verification.state})
           <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
-            <Image source={images.check} className="w-[110px] mx-auto my-5"/>       
-
-
+           <Image source={images.check} className="w-[110px] mx-auto my-5"/>   
+            <Text className=" w-[110px] h-[110px] mx-auto my-5"/>
+            <Text className="text-3xl font-jakartaBold text-center">Verifed</Text>
+            <CustomButton
+              title = "Browse Home" onPress={()=> router.replace("/(root)/(tabs)/home")} className="mt-5" />
           </View>
         </ReactNativeModal>
       </View>
