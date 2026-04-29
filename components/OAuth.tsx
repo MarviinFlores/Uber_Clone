@@ -1,6 +1,8 @@
 import {View,Text,Image } from "react-native";
-import CustomButton from "./CustomButton";
+import CustomButton from "@/components/CustomButton";
 import  {icons}  from "@/constants"
+import {useOAuth} from "@clerk/clerk-expo"
+import {router}from "expo-router"
 
 
 const OAuth = () => {
